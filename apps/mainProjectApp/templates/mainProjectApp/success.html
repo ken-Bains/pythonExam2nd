@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>quotes</title>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'mainProjectApp/css/mainApp.css' %}">
+</head>
+<body>
+
+	<div class=main_wrapper>
+		{% if messages %}
+			<div class="messagesClassSuccess">
+			    {% for message in messages %}
+			    	<p>{{ message }}</p>
+			    {% endfor %}
+			</div>
+		{% endif %}
+		<div class=header>
+			<h2>Welcome, {{user.alias.title}} !</h2>
+			<a href="/logout">Logout</a>
+		</div> <!-- end of header -->
+		<div class=main_content>
+			<div class=left_side>
+				<h3>Quotable Quotes</h3>
+				{% for quote in quotes %}
+						<fieldset>
+							<legend>Author: {{quote.author}}</legend>
+							<h5>Quote: {{quote.quote}}</h5>
+							<h5>Posted by: <a href="/user_page/{{quote.user.id}}">{{quote.user.first_name}}</a></h5>
+							<h5><a href="/user/{{quote.id}}">ADD TO  MY LIST</a></h5>
+						</fieldset>
+				{% endfor %}
+
+			</div> <!-- end of book_reviews -->
+			<div class=right_side>
+				<h3>Your Favorites:</h3>
+				<fieldset>
+					{% for fav in favs%}
+						<fieldset class="smaller">
+							<legend>Author: {{fav.quote.author}}</legend>
+							<span>Quote: {{fav.quote.quote}}</span><br>
+							<span>Posted by: <a href="/user_page/{{fav.user.id}}">{{fav.user.first_name}}</a></span>
+							<span><a href="/remove_fav/{{fav.id}}">Delete from my list</a></span>
+						</fieldset>
+					{%endfor%}
+				</fieldset>
+				<form action="/addQuote" method="post" class="book_add_form">
+					<fieldset>
+						{% csrf_token %}
+						<legend>Add Quote</legend>
+						Quoted By:<input type="text" name="author">
+						message:<textarea name="quote"></textarea>
+
+						<input type="submit" value="Add">
+					</fieldset>
+				</form>	
+
+			</div> <!-- end of other book reviews -->
+		</div> <!-- end of main content -->
+	</div><!-- end of main_wrapper -->
+
+
+</body>
+</html>

@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 import bcrypt
 import re
-import datetime
+from datetime import datetime
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]')
 
 # Create your models here.

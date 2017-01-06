@@ -14,9 +14,12 @@ class userManager(models.Manager):
 		email = post['email']
 		password = post['password']
 		passwordCheck = post['passwordCheck']
+		bday = post['bday']
 		errors = []
 		userId = 0
 
+
+		print bday, "ddedefefef"
 		if len(first) < 2:
 			errors.append('first name must be longer than 2 characters')
 
@@ -30,6 +33,9 @@ class userManager(models.Manager):
 		
 		if len(password) < 8:
 			errors.append('password needs to be grater than 8 characters')
+
+		if bday == "":
+			errors.append('please enter a bday')
 
 		if password != passwordCheck:
 			errors.append('password does not match')
@@ -79,6 +85,7 @@ class User(models.Model):
 	alias = models.CharField(max_length=50, default="alias")
 	email = models.CharField(max_length=100)
 	password = models.CharField(max_length=255)
+	birthday = models.DateTimeField(blank=True, null=True)
 	created_at = models.DateTimeField(auto_now_add = True)
 	updated_at = models.DateTimeField(auto_now = True)
 	objects = userManager()

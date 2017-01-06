@@ -45,7 +45,7 @@ class userManager(models.Manager):
 			emailExist = User.objects.filter(email=email)
 			if not emailExist:
 				hashed = bcrypt.hashpw(password.encode(), bcrypt.gensalt())
-				user = User.objects.create(email=email, first_name= first, alias=alias, password=hashed)
+				user = User.objects.create(email=email, first_name= first, alias=alias, password=hashed, birthday=bday)
 				userId = user.id
 			else:
 				errors.append('Invalid login')
@@ -85,7 +85,7 @@ class User(models.Model):
 	alias = models.CharField(max_length=50, default="alias")
 	email = models.CharField(max_length=100)
 	password = models.CharField(max_length=255)
-	birthday = models.DateTimeField(blank=True, null=True)
+	birthday = models.DateField(blank=True, null=True)
 	created_at = models.DateTimeField(auto_now_add = True)
 	updated_at = models.DateTimeField(auto_now = True)
 	objects = userManager()

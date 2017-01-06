@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>user </title>
+	{% load staticfiles %}
+	<link rel="stylesheet" type="text/css" href="{% static 'mainProjectApp/css/mainApp.css' %}">
+</head>
+<body>
+<div class="main_wrapper">
+		<div class="header">
+			<a href="/success" class="first_link">Home</a>
+			<a href="/logout">Logout</a>
+		</div> <!-- end of header -->
+		<div class="main_content">
+			<h2>Item: {{item.item}}</h2>
+			<h3>Users who added this item:</h3>
+			<hr>
+			{% for item in users %}
+				<p>{{item.user.alias}}</p>
+			{% endfor %}
+
+		
+		</div> <!-- end of main content -->
+	</div><!-- end of main_wrapper -->
+</body>
+</html>

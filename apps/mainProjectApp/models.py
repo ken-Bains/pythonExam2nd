@@ -19,7 +19,6 @@ class userManager(models.Manager):
 		userId = 0
 
 
-		print bday, "ddedefefef"
 		if len(first) < 2:
 			errors.append('first name must be longer than 2 characters')
 
@@ -31,7 +30,9 @@ class userManager(models.Manager):
 		elif not EMAIL_REGEX.match(email):
 			errors.append('email not in right format')
 		
-		if len(password) < 8:
+		if len(password) < 1:
+			errors.append('password cannot be blank')
+		elif len(password) < 8:
 			errors.append('password needs to be grater than 8 characters')
 
 		if bday == "":
@@ -59,11 +60,13 @@ class userManager(models.Manager):
 		userId = 0
 		
 		if len(email) < 1:
-			errors.append('email cannot be blank!')
+			errors.append('email cannot be blank')
 		elif not EMAIL_REGEX.match(email):
 			errors.append('email not in right format')
 		
-		if len(password) < 8:
+		if len(password) < 1:
+			errors.append('password cannot be blank')
+		elif len(password) < 8:
 			errors.append('password needs to be grater than 8 characters')
 		
 		if not errors:
@@ -89,3 +92,47 @@ class User(models.Model):
 	created_at = models.DateTimeField(auto_now_add = True)
 	updated_at = models.DateTimeField(auto_now = True)
 	objects = userManager()
+
+
+
+
+
+class itemManager(models.Manager):
+	def add_item_to_db(self, post, id):
+		item = post['item']
+		errors = []
+
+		if len(item) < 1:
+			errors.append("please enter a item")
+		elif len(item) < 3:
+			errors.append("items length must be longer that 3 characters")
+		
+		if not errors:
+			userObject = User.objects.filter(id = id)
+			userObject = userObject[0]
+			item = Item.objects.create(item = item , user = userObject)
+
+			Wishlist.objects.create(item = item , user = userObject)
+
+		return errors
+	def add_to_wishlist(self, itemId, userId):
+		userObject = User.objects.filter(id = userId)
+		userObject = userObject[0]
+		item = Item.objects.filter(id=itemId)
+		item = item[0]
+		Wishlist.objects.create(item = item , user = userObject)
+		return item
+
+class Item(models.Model):
+	item = models.CharField(max_length=50)
+	user = models.ForeignKey('User')
+	created_at = models.DateTimeField(auto_now_add = True)
+	objects = itemManager()
+
+
+class Wishlist(models.Model):
+	user = models.ForeignKey('User')
+	item = models.ForeignKey('Item')
+	objects = itemManager()
+
+

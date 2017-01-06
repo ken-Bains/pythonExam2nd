@@ -17,45 +17,56 @@
 		{% endif %}
 		<div class=header>
 			<h2>Welcome, {{user.alias.title}} !</h2>
+			<a href="/add_item">Add Item</a>
 			<a href="/logout">Logout</a>
 		</div> <!-- end of header -->
 		<div class=main_content>
 			<div class=left_side>
-				<h3>Quotable Quotes</h3>
-				{% for quote in quotes %}
-						<fieldset>
-							<legend>Author: {{quote.author}}</legend>
-							<h5>Quote: {{quote.quote}}</h5>
-							<h5>Posted by: <a href="/user_page/{{quote.user.id}}">{{quote.user.first_name}}</a></h5>
-							<h5><a href="/user/{{quote.id}}">ADD TO  MY LIST</a></h5>
-						</fieldset>
-				{% endfor %}
-
-			</div> <!-- end of book_reviews -->
-			<div class=right_side>
-				<h3>Your Favorites:</h3>
-				<fieldset>
-					{% for fav in favs%}
-						<fieldset class="smaller">
-							<legend>Author: {{fav.quote.author}}</legend>
-							<span>Quote: {{fav.quote.quote}}</span><br>
-							<span>Posted by: <a href="/user_page/{{fav.user.id}}">{{fav.user.first_name}}</a></span>
-							<span><a href="/remove_fav/{{fav.id}}">Delete from my list</a></span>
-						</fieldset>
-					{%endfor%}
-				</fieldset>
-				<form action="/addQuote" method="post" class="book_add_form">
+				<h3>Your wishlist:</h3>
 					<fieldset>
-						{% csrf_token %}
-						<legend>Add Quote</legend>
-						Quoted By:<input type="text" name="author">
-						message:<textarea name="quote"></textarea>
-
-						<input type="submit" value="Add">
+						<table>
+							<tr>
+							    <th>Item</th>
+							    <th>Added By</th> 
+							    <th>Date Added</th>
+							    <th>Action</th>
+							 </tr>
+							{% for item in userWishlist%}
+								<tr> 
+									<td><a href="/item_page/{{item.item.id}}">{{item.item.item}}</a></td>
+									<td>{{item.item.user.alias}}</td>
+									<td>{{item.item.created_at}}</td>
+									{% if item.item.user.id == request.session.id%}
+										<td><a href="/delete/{{item.item.id}}">delete</a></td>
+									{%else%}
+										<td><a href="/remove_wishlist/{{item.item.id}}">Remove From Wishlist</a></td>
+									{%endif%}
+								</tr>
+							{% endfor %}
+						</table>
 					</fieldset>
-				</form>	
 
-			</div> <!-- end of other book reviews -->
+					<h3>Other Users Wishlist Items:</h3>
+					<fieldset>
+						<table>
+							<tr>
+							    <th>Item</th>
+							    <th>Added By</th> 
+							    <th>Date Added</th>
+							    <th>Action</th>
+							 </tr>
+							{% for item in items%}
+								<tr> 
+									<td><a href="/item_page/{{item.id}}">{{item.item}}</a></td>
+									<td>{{item.user.alias}}</td>
+									<td>{{item.created_at}}</td>
+									<td><a href="/add_to_wishlist/{{item.id}}">Add to Wishlist</a></td>
+								</tr>
+							{% endfor %}
+						</table>
+					</fieldset>
+			</div> <!-- end of book_reviews -->
+			
 		</div> <!-- end of main content -->
 	</div><!-- end of main_wrapper -->
 
